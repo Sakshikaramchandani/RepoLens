@@ -1,0 +1,15 @@
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    container_name: repolens-db
+    environment:
+      POSTGRES_DB: repolens
+      POSTGRES_USER: repolens
+      POSTGRES_PASSWORD: repolens
+    ports:
+      - "5432:5432"
+    volumes:
+      - repolens-pgdata:/var/lib/postgresql/data
+
+volumes:
+  repolens-pgdata:

@@ -1,0 +1,110 @@
+server:
+  port: ${PORT:8080}
+
+spring:
+  application:
+    name: repolens-backend
+  config:
+    # Local secrets (GITHUB_CLIENT_SECRET, GOOGLE_CLIENT_SECRET, ...) live in Backend/backend/.env — gitignored.
+    # Real environment variables always win over this file.
+    import: optional:file:.env[.properties]
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/repolens}
+    username: ${DB_USERNAME:repolens}
+    password: ${DB_PASSWORD:repolens}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+  mvc:
+    async:
+      request-timeout: 5m      # the default 30 s would cut long answers from slow local models halfway
+  ai:
+    model:
+      chat: ollama             # the only chat model (ai/OllamaClient)
+      embedding: ollama
+    ollama:
+      base-url: ${OLLAMA_BASE_URL:http://localhost:11434}
+      embedding:
+        options:
+          # ALWAYS keep embeddings on one model: changing it changes the vectors' size/meaning,
+          # so every project would have to be re-indexed (and V4's VECTOR(768) migrated).
+          model: nomic-embed-text
+      chat:
+        options:
+          model: ${OLLAMA_CHAT_MODEL:qwen2.5-coder:7b}
+          temperature: 0.1
+          num-ctx: 16384       # Ollama's default context is small; the RAG prompt (file map + code) would be cut
+    vectorstore:
+      pgvector:
+        initialize-schema: false     # Flyway (V4) owns the table, not Spring AI
+        schema-validation: false
+        table-name: vector_store
+        dimensions: 768              # nomic-embed-text = 768
+        index-type: HNSW
+        distance-type: COSINE_DISTANCE
+
+app:
+  dev-tools:
+    enabled: ${DEV_TOOLS_ENABLED:false}   # Swagger + /api/ai/test-* debug endpoints
+  jwt:
+    secret: ${JWT_SECRET}            # required, ≥32 chars — set in .env (never commit it)
+    expiration-ms: 86400000
+  cors:
+    allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:5173}
+  frontend-url: ${FRONTEND_URL:http://localhost:5173}
+  storage:
+    root: ${STORAGE_ROOT:./storage}
+  upload:
+    max-zip-bytes: 52428800
+    max-file-bytes: 2097152
+    max-total-bytes: 209715200
+    max-entries: 10000
+  github:
+    api-url: https://api.github.com
+    oauth-url: https://github.com/login/oauth
+    client-id: ${GITHUB_CLIENT_ID:}
+    client-secret: ${GITHUB_CLIENT_SECRET:}
+    token-key: ${GITHUB_TOKEN_KEY}   # required, Base64 32-byte AES key — set in .env (never commit it)
+    clone-timeout-seconds: 180
+    history-depth: 300               # commits cloned + analysed for the risk map (churn, bug fixes)
+    max-repo-size-mb: 200
+  google:
+    # "Continue with Google" (OAuth web client). Empty id/secret = button hidden.
+    client-id: ${GOOGLE_CLIENT_ID:}
+    client-secret: ${GOOGLE_CLIENT_SECRET:}
+    # Must EXACTLY match an "Authorized redirect URI" of the Google client. Google sends the browser
+    # here; GoogleCallbackForwarder passes code + state on to the frontend.
+    redirect-uri: ${GOOGLE_REDIRECT_URI:http://localhost:8080/login/oauth2/code/google}
+    auth-url: https://accounts.google.com/o/oauth2/v2/auth
+    token-url: https://oauth2.googleapis.com/token
+    userinfo-url: https://openidconnect.googleapis.com/v1/userinfo
+  indexing:
+    batch-size: 32                   # chunks embedded per call
+  chat:
+    candidates: 40             # chunks fetched from EACH of vector + keyword search
+    top-k: 10                  # chunks given to the model (max 3 per file, so several files make it in)
+    broad-top-k: 16            # "list all endpoints", "how does the app work": wider net, max 2 per file
+    related-files: 4           # + outlines of project files the retrieved code references (one hop)
+    rrf-k: 60                  # RRF constant (standard value)
+    max-context-chars: 32000   # code budget in the prompt (~9K tokens; fits the 16K Ollama context)
+    history-messages: 6        # earlier messages sent along for follow-up questions
+  review:
+    max-files: 5
+    max-chars-per-file: 12000
+    max-total-chars: 36000
+
+springdoc:
+  # Swagger UI + OpenAPI JSON describe every endpoint: local development only (DEV_TOOLS_ENABLED=true)
+  api-docs:
+    enabled: ${DEV_TOOLS_ENABLED:false}
+  swagger-ui:
+    enabled: ${DEV_TOOLS_ENABLED:false}
+    path: /swagger-ui.html

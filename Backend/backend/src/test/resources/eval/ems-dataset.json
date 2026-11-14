@@ -1,0 +1,453 @@
+{
+  "dataset": "ems-eval-v1",
+  "project": "employee-management-system-main",
+  "createdBy": "Sakshi",
+  "description": "30 questions about the Employee Management System backend, each with the code location that answers it. Input for the Week 5 eval harness (Hit@5, MRR).",
+  "matchingRule": "A retrieved chunk counts as a hit if its filePath equals expected.file AND (expected.method is null OR the chunk's methodName equals expected.method). Any one expected entry is enough. A null method means any chunk of that file (class overview or FILE chunk).",
+  "questions": [
+    {
+      "id": "q01",
+      "type": "named",
+      "question": "What does the login method in AuthService do?",
+      "expected": [
+        {
+          "file": "employee-management-system-main/src/main/java/com/ems/service/AuthService.java",
+          "method": "login"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "q02",
+      "type": "flow",
+      "question": "What happens when a user logs in? Which controller and service are involved?",
+      "expected": [
+        {
+          "file": "employee-management-system-main/src/main/java/com/ems/controller/AuthController.java",
+          "method": "login"
+        },
+        {
+          "file": "employee-management-system-main/src/main/java/com/ems/service/AuthService.java",
+          "method": "login"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "q03",
+      "type": "behaviour",
+      "question": "How is a user looked up by email when they try to log in?",
+      "expected": [
+        {
+          "file": "employee-management-system-main/src/main/java/com/ems/repository/UserRepository.java",
+          "method": "findByEmail"
+        },
+        {
+          "file": "employee-management-system-main/src/main/java/com/ems/service/AuthService.java",
+          "method": "login"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "q04",
+      "type": "named",
+      "question": "Which fields does LoginResponse send back to the frontend after login?",
+      "expected": [
+        {
+          "file": "employee-management-system-main/src/main/java/com/ems/dto/LoginResponse.java",
+          "method": null
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "q05",
+      "type": "endpoint",
+      "question": "Which endpoint approves a leave request?",
+      "expected": [
+        {
+          "file": "employee-management-system-main/src/main/java/com/ems/controller/LeaveController.java",
+          "method": "approveLeave"
+        },
+        {
+          "file": "employee-management-system-main/src/main/java/com/ems/service/LeaveService.java",
+          "method": "approveLeave"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "q06",
+      "type": "behaviour",
+      "question": "Where is a leave request rejected?",
+      "expected": [
+        {
+          "file": "employee-management-system-main/src/main/java/com/ems/service/LeaveService.java",
+          "method": "rejectLeave"
+        },
+        {
+          "file": "employee-management-system-main/src/main/java/com/ems/controller/LeaveController.java",
+          "method": "rejectLeave"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "q07",
+      "type": "behaviour",
+      "question": "How do we count how many leave requests are still waiting for approval?",
+      "expected": [
+        {
+          "file": "employee-management-system-main/src/main/java/com/ems/service/LeaveService.java",
+          "method": "getPendingCount"
+        },
+        {
+          "file": "employee-management-system-main/src/main/java/com/ems/repository/LeaveRepository.java",
+          "method": "countByStatus"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "q08",
+      "type": "behaviour",
+      "question": "How can I get all leaves taken by one particular employee?",
+      "expected": [
+        {
+          "file": "employee-management-system-main/src/main/java/com/ems/service/LeaveService.java",
+          "method": "getLeavesByEmployee"
+        },
+        {
+          "file": "employee-management-system-main/src/main/java/com/ems/repository/LeaveRepository.java",
+          "method": "findByEmployeeId"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "q09",
+      "type": "named",
+      "question": "What does PromotionService.promoteEmployee do?",
+      "expected": [
+        {
+          "file": "employee-management-system-main/src/main/java/com/ems/service/PromotionService.java",
+          "method": "promoteEmployee"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "q10",
+      "type": "behaviour",
+      "question": "When someone gets promoted, where are the old and new designation and salary stored?",
+      "expected": [
+        {
+          "file": "employee-management-system-main/src/main/java/com/ems/entity/Promotion.java",
+          "method": null
+        },
+        {
+          "file": "employee-management-system-main/src/main/java/com/ems/service/PromotionService.java",
+          "method": "promoteEmployee"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "q11",
+      "type": "behaviour",
+      "question": "How is the attendance rate calculated?",
+      "expected": [
+        {
+          "file": "employee-management-system-main/src/main/java/com/ems/service/AttendanceService.java",
+          "method": "getAttendanceRate"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "q12",
+      "type": "behaviour",
+      "question": "How many employees were present today and how is that counted?",
+      "expected": [
+        {
+          "file": "employee-management-system-main/src/main/java/com/ems/service/AttendanceService.java",
+          "method": "getTodayAttendanceCount"
+        },
+        {
+          "file": "employee-management-system-main/src/main/java/com/ems/service/AttendanceService.java",
+          "method": "getPresentCount"
+        },
+        {
+          "file": "employee-management-system-main/src/main/java/com/ems/repository/AttendanceRepository.java",
+          "method": "countByDate"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "q13",
+      "type": "named",
+      "question": "Which query builds the attendance trend?",
+      "expected": [
+        {
+          "file": "employee-management-system-main/src/main/java/com/ems/repository/AttendanceRepository.java",
+          "method": "getAttendanceTrend"
+        },
+        {
+          "file": "employee-management-system-main/src/main/java/com/ems/service/AttendanceService.java",
+          "method": "getAttendanceTrend"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "q14",
+      "type": "endpoint",
+      "question": "Which endpoint returns the attendance records of an employee by name?",
+      "expected": [
+        {
+          "file": "employee-management-system-main/src/main/java/com/ems/controller/AttendanceController.java",
+          "method": "getAttendanceByEmployeeName"
+        },
+        {
+          "file": "employee-management-system-main/src/main/java/com/ems/repository/AttendanceRepository.java",
+          "method": "findByEmployeeName"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "q15",
+      "type": "flow",
+      "question": "What data does the dashboard show and where is it collected?",
+      "expected": [
+        {
+          "file": "employee-management-system-main/src/main/java/com/ems/service/DashboardService.java",
+          "method": "getDashboardData"
+        },
+        {
+          "file": "employee-management-system-main/src/main/java/com/ems/controller/DashboardController.java",
+          "method": "getDashboard"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "q16",
+      "type": "behaviour",
+      "question": "What happens when the application starts? Is any initial data created?",
+      "expected": [
+        {
+          "file": "employee-management-system-main/src/main/java/com/ems/EmployeeManagementSystemApplication.java",
+          "method": "initDatabase"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "q17",
+      "type": "behaviour",
+      "question": "How are the upcoming holidays fetched?",
+      "expected": [
+        {
+          "file": "employee-management-system-main/src/main/java/com/ems/service/HolidayService.java",
+          "method": "getUpcomingHolidays"
+        },
+        {
+          "file": "employee-management-system-main/src/main/java/com/ems/repository/HolidayRepository.java",
+          "method": "findTop5ByOrderByHolidayDateAsc"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "q18",
+      "type": "behaviour",
+      "question": "How are the most recent activities for the dashboard selected?",
+      "expected": [
+        {
+          "file": "employee-management-system-main/src/main/java/com/ems/service/ActivityService.java",
+          "method": "getRecentActivities"
+        },
+        {
+          "file": "employee-management-system-main/src/main/java/com/ems/repository/ActivityRepository.java",
+          "method": "findTop8ByOrderByActivityDateDesc"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "q19",
+      "type": "behaviour",
+      "question": "How is a notification marked as read?",
+      "expected": [
+        {
+          "file": "employee-management-system-main/src/main/java/com/ems/service/NotificationService.java",
+          "method": "markAsRead"
+        },
+        {
+          "file": "employee-management-system-main/src/main/java/com/ems/controller/NotificationController.java",
+          "method": "markAsRead"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "q20",
+      "type": "behaviour",
+      "question": "How is the number of unread notifications counted?",
+      "expected": [
+        {
+          "file": "employee-management-system-main/src/main/java/com/ems/repository/NotificationRepository.java",
+          "method": "countByReadFalse"
+        },
+        {
+          "file": "employee-management-system-main/src/main/java/com/ems/service/NotificationService.java",
+          "method": "getUnreadCount"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "q21",
+      "type": "named",
+      "question": "What does PayrollService.getSalaryBands return?",
+      "expected": [
+        {
+          "file": "employee-management-system-main/src/main/java/com/ems/service/PayrollService.java",
+          "method": "getSalaryBands"
+        },
+        {
+          "file": "employee-management-system-main/src/main/java/com/ems/controller/PayrollController.java",
+          "method": "getBands"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "q22",
+      "type": "behaviour",
+      "question": "Where are the total payroll amounts calculated?",
+      "expected": [
+        {
+          "file": "employee-management-system-main/src/main/java/com/ems/service/PayrollService.java",
+          "method": "getPayrollTotals"
+        },
+        {
+          "file": "employee-management-system-main/src/main/java/com/ems/controller/PayrollController.java",
+          "method": "getTotals"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "q23",
+      "type": "named",
+      "question": "Which fields make up a payroll record, like basic salary, bonus and deduction?",
+      "expected": [
+        {
+          "file": "employee-management-system-main/src/main/java/com/ems/entity/Payroll.java",
+          "method": null
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "q24",
+      "type": "behaviour",
+      "question": "How does the app count the projects that are currently active?",
+      "expected": [
+        {
+          "file": "employee-management-system-main/src/main/java/com/ems/service/ProjectService.java",
+          "method": "getActiveProjectCount"
+        },
+        {
+          "file": "employee-management-system-main/src/main/java/com/ems/repository/ProjectRepository.java",
+          "method": "countByStatus"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "q25",
+      "type": "behaviour",
+      "question": "How is the number of employees per department computed?",
+      "expected": [
+        {
+          "file": "employee-management-system-main/src/main/java/com/ems/service/DepartmentService.java",
+          "method": "getDepartmentDistribution"
+        },
+        {
+          "file": "employee-management-system-main/src/main/java/com/ems/controller/DepartmentController.java",
+          "method": "getDepartmentDistribution"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "q26",
+      "type": "behaviour",
+      "question": "How are employee statistics calculated?",
+      "expected": [
+        {
+          "file": "employee-management-system-main/src/main/java/com/ems/service/EmployeeService.java",
+          "method": "getEmployeeStats"
+        },
+        {
+          "file": "employee-management-system-main/src/main/java/com/ems/controller/EmployeeController.java",
+          "method": "getStats"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "q27",
+      "type": "behaviour",
+      "question": "How can an employee be found by their employee code?",
+      "expected": [
+        {
+          "file": "employee-management-system-main/src/main/java/com/ems/repository/EmployeeRepository.java",
+          "method": "findByEmployeeCode"
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "q28",
+      "type": "config",
+      "question": "Which database and connection settings does the application use?",
+      "expected": [
+        {
+          "file": "employee-management-system-main/src/main/resources/application.properties",
+          "method": null
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "q29",
+      "type": "dependency",
+      "question": "Which libraries and Spring Boot starters does the project depend on?",
+      "expected": [
+        {
+          "file": "employee-management-system-main/pom.xml",
+          "method": null
+        }
+      ],
+      "verified": false
+    },
+    {
+      "id": "q30",
+      "type": "config",
+      "question": "Where is CORS configured so the frontend can call the API?",
+      "expected": [
+        {
+          "file": "employee-management-system-main/src/main/java/com/ems/config/WebConfig.java",
+          "method": "addCorsMappings"
+        }
+      ],
+      "verified": false
+    }
+  ]
+}
