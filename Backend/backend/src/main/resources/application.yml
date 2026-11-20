@@ -1,5 +1,8 @@
 server:
   port: ${PORT:8080}
+  # Behind a reverse proxy (Caddy on AWS) set FORWARD_HEADERS_STRATEGY=native so the real client IP
+  # (X-Forwarded-For) reaches the rate limiter and redirects use https
+  forward-headers-strategy: ${FORWARD_HEADERS_STRATEGY:none}
 
 spring:
   application:
@@ -12,6 +15,8 @@ spring:
     url: ${DB_URL:jdbc:postgresql://localhost:5432/repolens}
     username: ${DB_USERNAME:repolens}
     password: ${DB_PASSWORD:repolens}
+    hikari:
+      maximum-pool-size: ${DB_POOL_SIZE:10}   # Supabase free tier: keep it small (5)
   jpa:
     hibernate:
       ddl-auto: validate

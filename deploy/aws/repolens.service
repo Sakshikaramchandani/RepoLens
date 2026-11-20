@@ -1,0 +1,16 @@
+[Unit]
+Description=RepoLens backend (Spring Boot)
+After=network-online.target ollama.service
+Wants=network-online.target
+
+[Service]
+User=repolens
+WorkingDirectory=/opt/repolens
+# Settings + secrets come from /opt/repolens/.env (read by Spring from the working directory)
+ExecStart=/usr/bin/java -Xms256m -Xmx1g -jar /opt/repolens/app.jar
+Restart=on-failure
+RestartSec=10
+SuccessExitStatus=143
+
+[Install]
+WantedBy=multi-user.target

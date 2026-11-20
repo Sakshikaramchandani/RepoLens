@@ -106,6 +106,10 @@ Create an OAuth App at [github.com/settings/developers](https://github.com/setti
 
 Put its client ID and secret in `Backend/backend/.env` as `GITHUB_CLIENT_ID` / `GITHUB_CLIENT_SECRET` and restart the backend. The *Continue with GitHub* button appears automatically once they are set.
 
+## Deploy
+
+Vercel (frontend) + AWS EC2 (backend, Ollama, HTTPS via Caddy) + Supabase (database): step-by-step in [docs/DEPLOY.md](docs/DEPLOY.md); server files in [`deploy/aws/`](deploy/aws).
+
 ## How it works
 
 - **Languages** — one registry (`language/Language.java`) decides, per language, which files belong to it and how its comments and strings look. The same registry drives import, indexing, chunking, review and the risk map, and the frontend's syntax highlighting mirrors it.

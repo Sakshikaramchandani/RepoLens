@@ -1,0 +1,10 @@
+# HTTPS in front of the Spring Boot backend. setup-server.sh replaces API_DOMAIN.
+API_DOMAIN {
+	request_body {
+		max_size 60MB
+	}
+	reverse_proxy 127.0.0.1:8080 {
+		# chat answers are streamed (SSE): pass every piece through immediately
+		flush_interval -1
+	}
+}
